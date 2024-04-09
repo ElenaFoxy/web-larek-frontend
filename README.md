@@ -1,5 +1,9 @@
 # Проектная работа "Веб-ларек"
 
+Ссылка на репозиторий
+https://github.com/ElenaFoxy/web-larek-frontend.git
+
+
 Стек: HTML, SCSS, TS, Webpack
 
 Структура проекта:
