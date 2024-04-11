@@ -45,6 +45,7 @@ yarn build
 
 ### Карточка товара
 export interface ICard {
+
 	id: string;
     description: string;
 	image: string;
@@ -61,8 +62,9 @@ enum Category { softskills, hardskills, plusone, button, other};
 
 ### Корзина с товарами
 export interface ICart {
-	list: IProductItem[];
-	total: number;
+
+    list: ICard[];
+    total: number;
 	add(item: ICard): void;
 	remove(itemId: ICard): void;
 	sumTotal(): number;
@@ -70,6 +72,7 @@ export interface ICart {
 
 ### Информация о заказе
 export interface IOrder {
+
         payment: Payment;
         email: string;
         phone: string;
@@ -83,6 +86,7 @@ export type FormErrors = Partial<Record<keyof IOrder, string>>;
 
 ### Методы работы с API
 export interface IWebLarekAPI {
+
 	getProductList(): Promise<ICard[]>; - получить список товаров
 	getProduct(id: number): Promise<ICard>; - получить товар по идентификатору
 	sendOrder(order: IOrder): Promise<IOrderStatus>; - отправить заказ
@@ -90,6 +94,7 @@ export interface IWebLarekAPI {
 
 ### Типы состояния приложения
 export interface IAppState {
+
     catalog: ICard[];
     basket: string[];
     order: IOrder | null;
@@ -97,6 +102,7 @@ export interface IAppState {
 
 ### Главная страница
 interface IPage {
+
     counter: number; счетчик корзины
     catalog: HTMLElement[]; каталог
     locked: boolean; блокировщик на главной странице
@@ -104,38 +110,44 @@ interface IPage {
 
 ### Статусы заказа
 export interface IOrderStatus {
+
 	status: string;
 	totalPrice: number;
 }
 
 ### Действия с карточкой товара
 interface ICardActions {
+
     onClick: (event: MouseEvent) => void;
 }
 
 ### Данные о контенте модального окна
 interface IModalData {
-  content: HTMLElement;
+content: HTMLElement;
 }
 
 ### Типы состояния полей
 interface IFormState {
+
     valid: boolean;
     errors: string[];
 }
 
 ### Тип итоговой суммы при успешном оформлении заказа
 interface ISuccess {
+
     total: number;
 }
 
 ### Возможные действия в случае удачной покупки
 interface ISuccessActions {
+
     onClick: () => void;
 }
 
 ### Описывает методы обработки событий
 export interface IEvents {
+
     on<T extends object>(event: EventName, callback: (data: T) => void): void; - подписка на событие
     emit<T extends object>(event: string, data?: T): void; - инициализация события
     trigger<T extends object>(event: string, context?: Partial<T>): (data: T) => void; - возвращает функцию, при вызове которой инициализируется требуемое в параметрах событие   
@@ -153,23 +165,23 @@ export interface IEvents {
 
 ### Базовый код
 #### Класс EventEmitter
-Брокер событий позволяет отправлять события и подписываться на события, происходящие в системе. Класс используется в презентере для обработки событий и в слоях приложения для генерации событий.  
-export class EventEmitter implements IEvents 
-constructor() {this._events = new Map<EventName, Set<Subscriber>>();} - конструктор класса, он использует Map для хранения обработчиков событий, ключ - это имя события, а значение - это набор функций-обработчиков.
-on<T extends object>(eventName: EventName, callback: (event: T) => void)  - устанавливает обработчик на событие
-off(eventName: EventName, callback: Subscriber)  - снимает обработчик с события
-emit<T extends object>(eventName: string, data?: T) - инициирует событие с данными
-onAll(callback: (event: EmitterEvent) => void) - слушает все события
-offAll() - сбрасывает все обработчики
-trigger<T extends object>(eventName: string, context?: Partial<T>) - коллбек триггер, генерирующий событие при вызове
+Брокер событий позволяет отправлять события и подписываться на события, происходящие в системе. Класс используется в презентере для обработки событий и в слоях приложения для генерации событий.   
+export class EventEmitter implements IEvents    
+constructor() {this._events = new Map<EventName, Set<Subscriber>>();} - конструктор класса, он использует Map для хранения обработчиков событий, ключ - это имя события, а значение - это набор функций-обработчиков.    
+on<T extends object>(eventName: EventName, callback: (event: T) => void)  - устанавливает обработчик на событие.    
+off(eventName: EventName, callback: Subscriber)  - снимает обработчик с события.    
+emit<T extends object>(eventName: string, data?: T) - инициирует событие с данными.    
+onAll(callback: (event: EmitterEvent) => void) - слушает все события.    
+offAll() - сбрасывает все обработчики.    
+trigger<T extends object>(eventName: string, context?: Partial<T>) - коллбек триггер, генерирующий событие при вызове.    
 #### Класс Api
-Содержит в себе базовую логику отправки запросов. 
-readonly baseUrl: string; базовый адрес сервера
-protected options: RequestInit; настройки для запросов к API
-constructor(baseUrl: string, options: RequestInit = {}) - конструктор класса принимает baseUrl и options, которые используются для инициализации свойств класса
-get(uri: string) - выполняет GET запрос для получения объекта сервера
-post(uri: string, data: object, method: ApiPostMethods = 'POST') - принимает объект с данными, которые будут переданы в JSON в теле запроса, и отправляет эти данные на ендпоинт переданный как параметр при вызове метода. По умолчанию выполняется POST запрос, но метод запроса может быть переопределен заданием третьего параметра при вызове.
-protected handleResponse(response: Response): Promise<object> - обработчик ответа сервера;
+Содержит в себе базовую логику отправки запросов.   
+readonly baseUrl: string; - базовый адрес сервера.   
+protected options: RequestInit; - настройки для запросов к API.   
+constructor(baseUrl: string, options: RequestInit = {}) - конструктор класса принимает baseUrl и options, которые используются для инициализации свойств класса.   
+get(uri: string) - выполняет GET запрос для получения объекта сервера.    
+post(uri: string, data: object, method: ApiPostMethods = 'POST') - принимает объект с данными, которые будут переданы в JSON в теле запроса, и отправляет эти данные на ендпоинт переданный как параметр при вызове метода. По умолчанию выполняется POST запрос, но метод запроса может быть переопределен заданием третьего параметра при вызове.    
+protected handleResponse(response: Response): Promise<object> - обработчик ответа сервера.   
 
 #### Класс WebLarekApi
 Для работы с Api магазина. Наследуется от базового класса Api.
