@@ -181,7 +181,7 @@ export interface IEvents {
 **constructor(baseUrl: string, options: RequestInit = {})** - конструктор класса принимает baseUrl и options, которые используются для инициализации свойств класса.   
 **get(uri: string)** - выполняет GET запрос для получения объекта сервера.    
 **post(uri: string, data: object, method: ApiPostMethods = 'POST')** - принимает объект с данными, которые будут переданы в JSON в теле запроса, и отправляет эти данные на ендпоинт переданный как параметр при вызове метода. По умолчанию выполняется POST запрос, но метод запроса может быть переопределен заданием третьего параметра при вызове.    
-**protected handleResponse(response: Response): Promise<object>** - обработчик ответа сервера.   
+**protected handleResponse(response: Response): Promise<object> ** - обработчик ответа сервера.   
 
 #### Класс WebLarekApi
 Для работы с Api магазина. Наследуется от базового класса Api.
