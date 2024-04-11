@@ -166,152 +166,148 @@ export interface IEvents {
 ### Базовый код
 #### Класс EventEmitter
 Брокер событий позволяет отправлять события и подписываться на события, происходящие в системе. Класс используется в презентере для обработки событий и в слоях приложения для генерации событий.   
-export class EventEmitter implements IEvents    
-constructor() {this._events = new Map<EventName, Set<Subscriber>>();} - конструктор класса, он использует Map для хранения обработчиков событий, ключ - это имя события, а значение - это набор функций-обработчиков.    
-on<T extends object>(eventName: EventName, callback: (event: T) => void)  - устанавливает обработчик на событие.    
-off(eventName: EventName, callback: Subscriber)  - снимает обработчик с события.    
-emit<T extends object>(eventName: string, data?: T) - инициирует событие с данными.    
-onAll(callback: (event: EmitterEvent) => void) - слушает все события.    
-offAll() - сбрасывает все обработчики.    
-trigger<T extends object>(eventName: string, context?: Partial<T>) - коллбек триггер, генерирующий событие при вызове.    
+**export class EventEmitter implements IEvents**    
+**constructor() {this._events = new Map<EventName, Set<Subscriber>>();}** - конструктор класса, он использует Map для хранения обработчиков событий, ключ - это имя события, а значение - это набор функций-обработчиков.    
+**on<T extends object>(eventName: EventName, callback: (event: T) => void)**  - устанавливает обработчик на событие.    
+**off(eventName: EventName, callback: Subscriber)**  - снимает обработчик с события.    
+**emit<T extends object>(eventName: string, data?: T)** - инициирует событие с данными.    
+**onAll(callback: (event: EmitterEvent) => void)** - слушает все события.    
+**offAll()** - сбрасывает все обработчики.    
+**trigger<T extends object>(eventName: string, context?: Partial<T>)** - коллбек триггер, генерирующий событие при вызове.    
 #### Класс Api
 Содержит в себе базовую логику отправки запросов.   
-readonly baseUrl: string; - базовый адрес сервера.   
-protected options: RequestInit; - настройки для запросов к API.   
-constructor(baseUrl: string, options: RequestInit = {}) - конструктор класса принимает baseUrl и options, которые используются для инициализации свойств класса.   
-get(uri: string) - выполняет GET запрос для получения объекта сервера.    
-post(uri: string, data: object, method: ApiPostMethods = 'POST') - принимает объект с данными, которые будут переданы в JSON в теле запроса, и отправляет эти данные на ендпоинт переданный как параметр при вызове метода. По умолчанию выполняется POST запрос, но метод запроса может быть переопределен заданием третьего параметра при вызове.    
-protected handleResponse(response: Response): Promise<object> - обработчик ответа сервера.   
+**readonly baseUrl: string;** - базовый адрес сервера.   
+**protected options: RequestInit;** - настройки для запросов к API.   
+**constructor(baseUrl: string, options: RequestInit = {})** - конструктор класса принимает baseUrl и options, которые используются для инициализации свойств класса.   
+**get(uri: string)** - выполняет GET запрос для получения объекта сервера.    
+**post(uri: string, data: object, method: ApiPostMethods = 'POST')** - принимает объект с данными, которые будут переданы в JSON в теле запроса, и отправляет эти данные на ендпоинт переданный как параметр при вызове метода. По умолчанию выполняется POST запрос, но метод запроса может быть переопределен заданием третьего параметра при вызове.    
+**protected handleResponse(response: Response): Promise<object>** - обработчик ответа сервера.   
 
 #### Класс WebLarekApi
 Для работы с Api магазина. Наследуется от базового класса Api.
-Все методы используют асинхронные операции для взаимодействия с сервером, это позволяет избежать блокировки выполнения кода.
-getProduct(id: string): Promise<ICard> - получение данных о товаре по id;
-getProductsList(): Promise<ICard[]> - получение всего каталога товаров;
-sendOrder(order: IOrder): Promise<IOrderStatus> - отправка оформленного заказа.
+Все методы используют асинхронные операции для взаимодействия с сервером, это позволяет избежать блокировки выполнения кода.    
+**getProduct(id: string): Promise<ICard>** - получение данных о товаре по id.     
+**getProductsList(): Promise<ICard[]>** - получение всего каталога товаров;    
+**sendOrder(order: IOrder): Promise<IOrderStatus>** - отправка оформленного заказа.    
 Методы getProductList и getProduct выполняют GET-запросы к серверу, а метод sendOrder выполняет POST-запрос.
 
 ### Слой отображения View
 #### Класс Component 
-Класс для создания компонентов, содержит основные методы для работы с DOM
-protected constructor(protected readonly container: HTMLElement) - конструктор класса, принимает контейнер, который будет использоваться для отображения компонента
-toggleClass(element: HTMLElement, className: string, force?: boolean) переключает класс className у элемента element
-protected setText(element: HTMLElement, value: unknown) - устанавливает текст value в элемент element
-setDisabled(element: HTMLElement, state: boolean) - меняет статус блокировки
-protected setHidden(element: HTMLElement) - скрывает элемент
-protected setVisible(element: HTMLElement) - отображает элемент
-protected setImage(element: HTMLImageElement, src: string, alt?: string) - устанавливает изображение из src и альтернативный текст alt для element
-render(data?: Partial<T>): HTMLElement - обновляет данные компонента данными из data, возвращает корневой DOM-элемент
-
+Класс для создания компонентов, содержит основные методы для работы с DOM.    
+**protected constructor(protected readonly container: HTMLElement)** - конструктор класса, принимает контейнер, который будет использоваться для отображения компонента.    
+**toggleClass(element: HTMLElement, className: string, force?: boolean)** переключает класс className у элемента element.    
+**protected setText(element: HTMLElement, value: unknown)** - устанавливает текст value в элемент element.    
+**setDisabled(element: HTMLElement, state: boolean)** - меняет статус блокировки.    
+**protected setHidden(element: HTMLElement)** - скрывает элемент.    
+**protected setVisible(element: HTMLElement)** - отображает элемент.     
+**protected setImage(element: HTMLImageElement, src: string, alt?: string)** - устанавливает изображение из src и альтернативный текст alt для element.    
+**render(data?: Partial<T>): HTMLElement** - обновляет данные компонента данными из data, возвращает корневой DOM-элемент.    
 
 ### Слой данных
 #### Класс Model 
-Базовый абстрактный класс для создания моделей.
-export abstract class Model<T>
-constructor(data: Partial<T>, protected events: IEvents) - в конструкторе класса Model, данные из data копируются в экземпляр класса
-emitChanges(event: string, payload?: object) - сообщает всем, что поменялось и какие данные связаны с этим изменением
-Функция isModel используется для проверки, является ли переданный объект экземпляром класса Model.
+Базовый абстрактный класс для создания моделей.    
+**export abstract class Model<T>**
+**constructor(data: Partial<T>, protected events: IEvents)** - в конструкторе класса Model, данные из data копируются в экземпляр класса.    
+**emitChanges(event: string, payload?: object)** - сообщает всем, что поменялось и какие данные связаны с этим изменением.    
+Функция **isModel** используется для проверки, является ли переданный объект экземпляром класса Model.
 
 #### Класс AppState 
-Представляет собой состояние приложения, наследуется от Model
-export class AppState extends Model<IAppState> 
-cart: string[] - товары в корзине
-catalog: ICard[] - каталог товаров
-order: IOrder - заказ
-get cart(): string[] - получить список товаров в корзине для cart
-set cart(value: string[]) - установить список товаров в корзине для cart
-get catalog(): ICard[] -  получить каталог для catalog
-set catalog(value: ICard[]) - установить каталог для catalog
-get order(): IOrder - получить данные заказа для order
-set order(value: IOrder) - установить данные заказа для order
-
+Представляет собой состояние приложения, наследуется от Model.    
+**export class AppState extends Model<IAppState>**     
+**cart: string[]** - товары в корзине.    
+**catalog: ICard[]** - каталог товаров.    
+**order: IOrder** - заказ.    
+**get cart(): string[]** - получить список товаров в корзине для cart.   
+**set cart(value: string[])** - установить список товаров в корзине для cart.   
+**get catalog(): ICard[]** -  получить каталог для catalog.   
+**set catalog(value: ICard[])** - установить каталог для catalog.   
+**get order(): IOrder** - получить данные заказа для order.    
+**set order(value: IOrder)** - установить данные заказа для order.    
 
 ### Слой представления
 #### Класс Mainpage
-Отвечает за отображение главной страницы, компонент, который управляет визуальной частью страницы, такой как счетчик, каталог и состояние блокировки. 
-constructor(container: HTMLElement, protected events: IEvents) - инициализирует элементы страницы, настраивает обработчик события для клика по корзине, который вызывает событие cart:open
-protected _counter: HTMLElement; элемент - счётчик корзины
-protected _catalog: HTMLElement; элемент - каталог товаров
-protected _wrapper: HTMLElement; элемент - элемент, оборачивающий страницу
-protected _basket: HTMLElement; элемент - корзина
-set counter(value: number) - устанавливает счетчик корзины;
-set catalog(cards: HTMLElement[]) - определяет каталог товаров;
-set block(value: boolean) - блокирует страницу при открытом модальном окне.
+Отвечает за отображение главной страницы, компонент, который управляет визуальной частью страницы, такой как счетчик, каталог и состояние блокировки.    
+**constructor(container: HTMLElement, protected events: IEvents)** - инициализирует элементы страницы, настраивает обработчик события для клика по корзине, который вызывает событие cart:open.    
+**protected _counter: HTMLElement;** элемент - счётчик корзины.    
+**protected _catalog: HTMLElement;** элемент - каталог товаров.    
+**protected _wrapper: HTMLElement;** элемент - элемент, оборачивающий страницу... 
+**protected _basket: HTMLElement***; элемент - корзина.    
+**set counter(value: number)** - устанавливает счетчик корзины.    
+**set catalog(cards: HTMLElement[])** - определяет каталог товаров.    
+**set block(value: boolean)** - блокирует страницу при открытом модальном окне.    
 
 #### Класс Popup
-Отвечает за работу модального окна
-constructor(container: HTMLElement, protected events: IEvents) - принимает в конструкторе контейнер, в котором будет размещаться модальное окно, и объект events для обработки событий
-protected _closeButton: HTMLButtonElement; - кнопка закрытия окна
-protected _content: HTMLElement; - контейнер контента
-set content(value: HTMLElement) - устанавливает содержимое окна
-open() - открывает модальное окно, вызывает событие popup:open
-close() - закрывает модальное окно, вызывает событие popup:close
-render(content: IModalData): HTMLElement - отрисовка модального окна
-
-
+Отвечает за работу модального окна.    
+**constructor(container: HTMLElement, protected events: IEvents)** - принимает в конструкторе контейнер, в котором будет размещаться модальное окно, и объект events для обработки событий.    
+**protected _closeButton: HTMLButtonElement;** - кнопка закрытия окна.    
+**protected _content: HTMLElement;** - контейнер контента.    
+**set content(value: HTMLElement)** - устанавливает содержимое окна.     
+**open()** - открывает модальное окно, вызывает событие popup:open.    
+**close()** - закрывает модальное окно, вызывает событие popup:close.    
+**render(content: IModalData): HTMLElement** - отрисовка модального окна.    
 #### Класс Cart
-Отвечает за отображение корзины
-constructor(container: HTMLElement, protected events: EventEmitter) - инициализирует элементы корзины, так же настраивается обработчик события для клика по кнопке, который вызывает событие order:open 
-protected _list: HTMLElement; - товары в корзине
-protected _total: HTMLElement; - сумма товаров в корзине
-protected _button: HTMLElement; - элемент кнопки
-set total(total: number) - сеттер для total
-set items(items: HTMLElement[]) - сеттер для list
-get count() - считает количество товаров в корзине
-setButtonDisabled(state: boolean) - обновляет состояния кнопки
+Отвечает за отображение корзины.    
+**constructor(container: HTMLElement, protected events: EventEmitter)** - инициализирует элементы корзины, так же настраивается обработчик события для клика по кнопке, который вызывает событие order:open.     
+**protected _list: HTMLElement;** - товары в корзине.    
+**protected _total: HTMLElement;** - сумма товаров в корзине.    
+**protected _button: HTMLElement;** - элемент кнопки.    
+**set total(total: number)** - сеттер для total.    
+**set items(items: HTMLElement[])** - сеттер для list.    
+**get count()** - считает количество товаров в корзине.    
+**setButtonDisabled(state: boolean)** - обновляет состояния кнопки.    
 
 #### Класс Form
-Класс, который отвечает за отображение формы заказа
-constructor(protected container: HTMLFormElement, protected events: IEvents) - конструктор класса принимает контейнер формы container и объект events для обработки событий. 
-protected _submit: HTMLButtonElement; - кнопка отправки формы
-protected _errors: HTMLElement; - контейнер для отображения ошибок валидации
-set errors(value: string) - устанавливает текст ошибок
-set valid(value: boolean) - управляет состоянием кнопки (активное-неактивное) 
-render(state: Partial<T> & IFormState) - отображение формы заказа 
+Класс, который отвечает за отображение формы заказа.    
+**constructor(protected container: HTMLFormElement, protected events: IEvents)** - конструктор класса принимает контейнер формы container и объект events для обработки событий.    
+**protected _submit: HTMLButtonElement;** - кнопка отправки формы.   
+**protected _errors: HTMLElement;** - контейнер для отображения ошибок валидации.    
+**set errors(value: string)** - устанавливает текст ошибок.   
+**set valid(value: boolean)** - управляет состоянием кнопки.     (активное-неактивное).    
+**render(state: Partial<T> & IFormState)** - отображение формы заказа.     
 
 #### Класс Order extends Form
-Класс для работы с формой заказа, пользователь выбирает способ оплаты, вводит адрес для оформления заказа
-constructor(container: HTMLFormElement, events: IEvents)
-choicePayment(value: string) - выбор оплаты
-set address(value: string) - устанавливает адрес доставки заказа
+Класс для работы с формой заказа, пользователь выбирает способ оплаты, вводит адрес для оформления заказа.    
+**constructor(container: HTMLFormElement, events: IEvents)**
+**choicePayment(value: string)** - выбор оплаты.    
+**set address(value: string)** - устанавливает адрес доставки заказа.    
 
 #### Класс Contacts extends Form 
-Класс для работы с формой заказа, пользователь вводит личные данные - телефон и email
-constructor(container: HTMLFormElement, events: IEvents)
-set email(value: string) - устанавливает значение почты пользователя;
-set phone(value: string) - устанавливает значение номера телефона пользователя
+Класс для работы с формой заказа, пользователь вводит личные данные - телефон и email.    
+**constructor(container: HTMLFormElement, events: IEvents)**     
+**set email(value: string)** - устанавливает значение почты пользователя.    
+**set phone(value: string)** - устанавливает значение номера телефона пользователя.    
 
 #### Класс Success
-выводит сообщение об успешном оформлении заказа
-constructor(container: HTMLElement, actions: ISuccessActions)
-_close: HTMLElement; 
-_total: HTMLElement - общая сумма заказа
-get total(): string - получить итоговую стоимость;
-set total(value: string) - установить итоговую стоимость
+Класс выводит сообщение об успешном оформлении заказа.    
+**constructor(container: HTMLElement, actions: ISuccessActions)**    
+**_close: HTMLElement; **     
+**_total: HTMLElement** - общая сумма заказа.    
+**get total(): string** - получить итоговую стоимость.    
+**set total(value: string)** - установить итоговую стоимость.    
 
 #### Класс Card, который создаёт карточку товара
-Класс представляет собой компонент - карточку, она может отображать данные о товаре - название товара, фото, описание, кнопку добавления в корзину, категорию и цену.
-constructor(container: HTMLElement, protected data: T, protected events: IEvents)
-protected _title: HTMLElement; - название товара
-protected _image?: HTMLImageElement; - картинка товара
-protected _description?: HTMLElement; - описание товара
-protected _button?: HTMLButtonElement; - кнопка для добавления в корзину
-set title(value: string)  - устанавливает название товара 
-get title(): string - получить название товара 
-set image(value: string) - устанавливает картинку товара
-set description(value: string) - устанавливает описание товара
-addButoonAction(actions?: ICardActions): void - добавляет событие кнопке
+Класс представляет собой компонент - карточку, она может отображать данные о товаре - название товара, фото, описание, кнопку добавления в корзину, категорию и цену.     
+**constructor(container: HTMLElement, protected data: T, protected events: IEvents)**
+**protected _title: HTMLElement;** - название товара.    
+**protected _image?: HTMLImageElement;** - картинка товара.    
+**protected _description?: HTMLElement;** - описание товара.   
+**protected _button?: HTMLButtonElement;** - кнопка для добавления в корзину.    
+**set title(value: string)**  - устанавливает название товара.     
+**get title(): string** - получить название товара.     
+**set image(value: string)** - устанавливает картинку товара.    
+**set description(value: string)** - устанавливает описание товара.    
+**addButoonAction(actions?: ICardActions): void** - добавляет событие кнопке.    
 
 ## Cобытия в проекте "Веб-ларек"
-enum Events {
-CARDS_DISPLAY = 'cards:display', - обновление каталога товаров на странице. Для каждого товара создается новая карточка, которая отображается на странице.
-CARDS_SHOW = 'cards:show',  - генерируется при выборе товара. Генерирует класс Card. При нажатии на карточку выбранного товара происходит открытие модального окна с этим товаром. Model -> open(), а затем render()
-ORDER_OPEN = 'order:open', - событие происходит при нажатии кнопки оформления заказа. Открывается форма для заполнения полей заказа - выбор оплаты и адрес
-CONTACTS_OPEN = 'contacts:open', - открывается форма для заполнения контактов для заказа
-ORDER_SUBMIT = 'order:submit', - событие подтверждения оформления заказа. Данные заказа после проверки отправляются на сервер
-CART_OPEN = 'cart:open', - событие происходит при нажатии на корзину (открыть корзину)
-POPUP_OPEN = 'popup:open', - модальное окно открыто, страница блокируется
-POPUP_CLOSE = 'popup:close', - модальное окно закрыто, страница разблокирована
-CARD_ADD = 'card:add', - событие добавления товара в корзину
-CARD_DELETE = 'card:delete' - событие удаления товара из корзины
+**enum Events** {    
+CARDS_DISPLAY = 'cards:display', - обновление каталога товаров на странице. Для каждого товара создается новая карточка, которая отображается на странице.     
+CARDS_SHOW = 'cards:show',  - генерируется при выборе товара. Генерирует класс Card. При нажатии на карточку выбранного товара происходит открытие модального окна с этим товаром. Model -> open(), а затем render().     
+ORDER_OPEN = 'order:open', - событие происходит при нажатии кнопки оформления заказа. Открывается форма для заполнения полей заказа - выбор оплаты и адрес.    
+CONTACTS_OPEN = 'contacts:open', - открывается форма для заполнения контактов для заказа.     
+ORDER_SUBMIT = 'order:submit', - событие подтверждения оформления заказа. Данные заказа после проверки отправляются на сервер.     
+CART_OPEN = 'cart:open', - событие происходит при нажатии на корзину (открыть корзину).     
+POPUP_OPEN = 'popup:open', - модальное окно открыто, страница блокируется.    
+POPUP_CLOSE = 'popup:close', - модальное окно закрыто, страница разблокирована.    
+CARD_ADD = 'card:add', - событие добавления товара в корзину.    
+CARD_DELETE = 'card:delete' - событие удаления товара из корзины.    
 };
