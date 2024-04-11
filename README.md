@@ -181,7 +181,7 @@ export interface IEvents {
 **constructor(baseUrl: string, options: RequestInit = {})** - конструктор класса принимает baseUrl и options, которые используются для инициализации свойств класса.   
 **get(uri: string)** - выполняет GET запрос для получения объекта сервера.    
 **post(uri: string, data: object, method: ApiPostMethods = 'POST')** - принимает объект с данными, которые будут переданы в JSON в теле запроса, и отправляет эти данные на ендпоинт переданный как параметр при вызове метода. По умолчанию выполняется POST запрос, но метод запроса может быть переопределен заданием третьего параметра при вызове.    
-**protected handleResponse(response: Response): Promise<object> ** - обработчик ответа сервера.   
+**protected handleResponse(response: Response): Promise<object> -** обработчик ответа сервера.   
 
 #### Класс WebLarekApi
 Для работы с Api магазина. Наследуется от базового класса Api.
@@ -230,8 +230,8 @@ export interface IEvents {
 **constructor(container: HTMLElement, protected events: IEvents)** - инициализирует элементы страницы, настраивает обработчик события для клика по корзине, который вызывает событие cart:open.    
 **protected _counter: HTMLElement;** элемент - счётчик корзины.    
 **protected _catalog: HTMLElement;** элемент - каталог товаров.    
-**protected _wrapper: HTMLElement;** элемент - элемент, оборачивающий страницу... 
-**protected _basket: HTMLElement***; элемент - корзина.    
+**protected _wrapper: HTMLElement;** элемент - элемент, оборачивающий страницу.    
+**protected _basket: HTMLElement**; элемент - корзина.    
 **set counter(value: number)** - устанавливает счетчик корзины.    
 **set catalog(cards: HTMLElement[])** - определяет каталог товаров.    
 **set block(value: boolean)** - блокирует страницу при открытом модальном окне.    
