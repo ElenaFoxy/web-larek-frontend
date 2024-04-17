@@ -187,10 +187,10 @@ export interface IEvents {
 #### Класс Api
 Содержит в себе базовую логику отправки запросов.   
 `constructor(baseUrl: string, options: RequestInit = {})` - конструктор класса принимает baseUrl и options, которые используются для инициализации свойств класса.  
-Свойства:
+##### Свойства:
 `readonly baseUrl: string;` - базовый адрес сервера.   
 `protected options: RequestInit;` - настройки для запросов к API.   
-Методы: 
+##### Методы: 
 `get(uri: string)` - выполняет GET запрос для получения объекта сервера.    
 `post(uri: string, data: object, method: ApiPostMethods = 'POST')` - принимает объект с данными, которые будут переданы в JSON в теле запроса, и отправляет эти данные на ендпоинт переданный как параметр при вызове метода. По умолчанию выполняется POST запрос, но метод запроса может быть переопределен заданием третьего параметра при вызове.    
 `protected handleResponse**(response: Response): Promise<object>` - обработчик ответа сервера.   
@@ -198,7 +198,7 @@ export interface IEvents {
 #### Класс WebLarekApi
 `export class WebLarekAPI extends Api implements IWebLarekAPI`
 Для работы с Api магазина. Наследуется от базового класса Api.
-Методы:
+##### Методы:
 Все методы используют асинхронные операции для взаимодействия с сервером, это позволяет избежать блокировки выполнения кода.    
 `getProduct(id: string): Promise<ICard>` - получение данных о товаре по id.     
 `getProductsList(): Promise<ICard[]>` - получение всего каталога товаров;    
@@ -210,7 +210,7 @@ export interface IEvents {
 `export abstract class Component<T>` 
 Класс для создания компонентов, содержит основные методы для работы с DOM.    
 `protected constructor(protected readonly container: HTMLElement)` - конструктор класса, принимает контейнер, который будет использоваться для отображения компонента.    
-Методы:
+##### Методы:
 `toggleClass(element: HTMLElement, className: string, force?: boolean)` переключает класс className у элемента element.    
 `protected setText(element: HTMLElement, value: unknown)` - устанавливает текст value в элемент element.    
 `setDisabled(element: HTMLElement, state: boolean)` - меняет статус блокировки.    
@@ -230,7 +230,7 @@ export interface IEvents {
 #### Класс AppState 
 Представляет собой состояние приложения, наследуется от Model.    
 `export class AppState extends Model<IAppState>`     
-Свойства:
+##### Свойства:
 `private _cart: string[]` - товары в корзине. 
 `private _catalog: ICard[];` - каталог товаров.  
 `private _order: IOrder = ` - заказ.  
@@ -242,7 +242,7 @@ export interface IEvents {
 		items: [],
 		total: 0,
 	};    
- Методы:   
+ ##### Методы:   
 `get cart(): string[]` - получить список товаров в корзине для cart.   
 `set cart(value: string[])` - установить список товаров в корзине для cart.   
 `get catalog(): ICard[]` -  получить каталог для catalog.   
@@ -264,12 +264,12 @@ export interface IEvents {
 `export class MainPage extends Component<IPage>`
 Отвечает за отображение главной страницы, компонент, который управляет визуальной частью страницы, такой как счетчик, каталог и состояние блокировки.    
 `constructor(container: HTMLElement, protected events: IEvents)` - инициализирует элементы страницы, настраивает обработчик события для клика по корзине, который вызывает событие cart:open.    
-Свойства:
+##### Свойства:
 `protected _counter: HTMLElement;` элемент - счётчик корзины.    
 `protected _catalog: HTMLElement;` элемент - каталог товаров.    
 `protected _wrapper: HTMLElement;` элемент - элемент, оборачивающий страницу.    
 `protected _basket: HTMLElement`; элемент - корзина.    
-Методы:
+##### Методы:
 `set counter(value: number)` - устанавливает счетчик корзины.    
 `set catalog(cards: HTMLElement[])` - определяет каталог товаров.    
 `set block(value: boolean)` - блокирует страницу при открытом модальном окне.    
@@ -278,10 +278,10 @@ export interface IEvents {
 `export class Modal extends Component<IModalData>` 
 Отвечает за работу модального окна.    
 `constructor(container: HTMLElement, protected events: IEvents)` - принимает в конструкторе контейнер, в котором будет размещаться модальное окно, и объект events для обработки событий.   
-Свойства: 
+##### Свойства: 
 `protected _closeButton: HTMLButtonElement;` - кнопка закрытия окна.    
 `protected _content: HTMLElement;` - контейнер контента.    
-Методы:
+##### Методы:
 `set content(value: HTMLElement)` - устанавливает содержимое окна.     
 `open()` - открывает модальное окно, вызывает событие popup:open.    
 `close()` - закрывает модальное окно, вызывает событие popup:close.    
@@ -291,11 +291,11 @@ export interface IEvents {
 `export class Cart extends Component<ICartView>` 
 Отвечает за отображение корзины.    
 `constructor(container: HTMLElement, protected events: EventEmitter)` - инициализирует элементы корзины, так же настраивается обработчик события для клика по кнопке, который вызывает событие order:open.  
-Свойства:   
+##### Свойства:   
 `protected _list: HTMLElement;` - товары в корзине.    
 `protected _total: HTMLElement;` - сумма товаров в корзине.    
 `protected _button: HTMLElement;` - элемент кнопки. 
-Методы:
+##### Методы:
 `set total(total: number)` - сеттер для total.    
 `set items(items: HTMLElement[])` - сеттер для list.       
 `setButtonDisabled(state: boolean)` - обновляет состояния кнопки.    
@@ -304,10 +304,10 @@ export interface IEvents {
 export class Form<T> extends Component<IFormState>
 Класс, который отвечает за отображение формы заказа.    
 `constructor(protected container: HTMLFormElement, protected events: IEvents)` - конструктор класса принимает контейнер формы container и объект events для обработки событий.  
-Свойства:  
+##### Свойства:  
 `protected _submit: HTMLButtonElement;` - кнопка отправки формы.   
 `protected _errors: HTMLElement;` - контейнер для отображения ошибок валидации.   
-Методы:
+##### Методы:
 `set errors(value: string)` - устанавливает текст ошибок.   
 `set valid(value: boolean)` - управляет состоянием кнопки(активное-неактивное).    
 `render(state: Partial<T> & IFormState)` - отображение формы заказа.     
@@ -315,22 +315,22 @@ export class Form<T> extends Component<IFormState>
 #### Класс Order extends Form
 Класс для работы с формой заказа, пользователь выбирает способ оплаты, вводит адрес для оформления заказа.    
 `constructor(container: HTMLFormElement, events: IEvents)`
-Свойства:
+##### Свойства:
 `protected _online: HTMLButtonElement;` - элемент выбора оплаты онлайн.
 `protected _offline: HTMLButtonElement;` - элемент выбора оплаты при получении.
 `protected _button: HTMLButtonElement;` - кнопка для продолжения оформления заказа.
 `protected _address: HTMLInputElement;` - элемент для ввода адреса доставка.
-Методы:  
+##### Методы:  
 `set address(value: string)` - устанавливает адрес доставки заказа.    
 
 #### Класс Contacts extends Form 
 Класс для работы с формой заказа, пользователь вводит личные данные - телефон и email.    
 `constructor(container: HTMLFormElement, events: IEvents)`   
-Свойства:
+##### Свойства:
 `protected _email: HTMLButtonElement;` - элемент для ввода email.
 `protected _phone: HTMLButtonElement;` - элемент для ввода телефона.
 `protected _button: HTMLButtonElement;` - кнопка для оформления заказа.
-Методы: 
+##### Методы: 
 `set email(value: string)` - устанавливает значение почты пользователя.    
 `set phone(value: string)` - устанавливает значение номера телефона пользователя.    
 
@@ -346,20 +346,21 @@ export class Form<T> extends Component<IFormState>
 `export class Card<T> extends Component<ICard<T>>`
 Класс представляет собой компонент - карточку, она может отображать данные о товаре - название товара, фото, описание, кнопку добавления в корзину, категорию и цену.     
 `constructor(protected blockName: string, container: HTMLElement, actions?: ICardActions)`
- Свойства:
+ ##### Свойства:
 `protected _title: HTMLElement;` - название товара.    
 `protected _image: HTMLImageElement;` - картинка товара.    
 `protected _description: HTMLElement;` - описание товара.   
 `protected _button: HTMLButtonElement;` - кнопка для добавления в корзину.   
-`protected _category: HTMLButtonElement;` - категория товара
-`protected _price: HTMLElement;` - стоимость товара
+`protected _category: HTMLButtonElement;` - категория товара.   
+`protected _price: HTMLElement;` - стоимость товара.   
+##### Методы:
 `set title(value: string)`  - устанавливает название товара.     
 `get title(): string` - получить название товара.     
 `set image(value: string)` - устанавливает картинку товара.    
-`set description(value: string)` - устанавливает описание товара. 
-`set category(value: string)`  - устанавливает категорию товара
-`set price(price: number)` - устанавливает цену товара
-`set button(isAdd: boolean)` - устанавливает текст кнопки (В корзину/ купить)
+`set description(value: string)` - устанавливает описание товара.   
+`set category(value: string)`  - устанавливает категорию товара.    
+`set price(price: number)` - устанавливает цену товара.    
+`set button(isAdd: boolean)` - устанавливает текст кнопки (В корзину/ купить).    
 `addButtonAction(actions?: ICardActions): void` - добавляет событие кнопке.    
 
 ## Cобытия в проекте "Веб-ларек"
