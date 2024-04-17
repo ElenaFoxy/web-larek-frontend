@@ -45,7 +45,7 @@ yarn build
 ## Данные и типы данных, используемые в приложении
 
 ### Карточка товара
-\```
+```
 export interface ICard {
 	id: string;
     description: string;
@@ -54,12 +54,12 @@ export interface ICard {
 	category: string;
 	price: number;
 }
-\```
+```
 ### Перечисление способов оплаты
 `enum Payment { online = 'Онлайн', offline = 'При получении'};`
 
 ### Перечисление категорий товаров
-\```
+```
 export enum Category {
 	softskills = 'софт-скил',
 	hardskills = 'хард-скил',
@@ -67,10 +67,10 @@ export enum Category {
 	button = 'кнопка',
 	other = 'другое',
 }
-\```
+```
 
 ### Корзина с товарами
-\```
+```
 export interface ICart {
     list: ICard[];
     total: number;
@@ -78,9 +78,9 @@ export interface ICart {
 	remove(itemId: ICard): void;
 	sumTotal(): number;
 }
-\```
+```
 ### Информация о заказе
-\```
+```
 export interface IOrder {
         payment: Payment;
         email: string;
@@ -89,7 +89,7 @@ export interface IOrder {
         total: number;
         items: string[];
 }
-\```
+```
 ### Тип для описания объекта, содержащий ошибки формы
 `export type FormErrors = Partial<Record<keyof IOrder, string>>;` 
 
@@ -101,67 +101,67 @@ export interface IOrder {
 
 
 ### Типы состояния приложения
-\```
+```
 export interface IAppState {
     catalog: ICard[];
     cart: string[];
     order: IOrder | null;
 }
-\```
+```
 ### Главная страница
-\```
+```
 interface IPage {
     counter: number; счетчик корзины
     catalog: HTMLElement[]; каталог
     locked: boolean; блокировщик на главной странице
 }
-\```
+```
 ### Статусы заказа
-\```
+```
 export interface IOrderStatus {
 	status: string;
 	totalPrice: number;
 }
-\```
+```
 ### Действия с карточкой товара
-\```
+```
 interface ICardActions {
     onClick: (event: MouseEvent) => void;
 }
-\```
+```
 ### Данные о контенте модального окна
-\```
+```
 interface IModalData {
 content: HTMLElement;
 }
-\```
+```
 ### Типы состояния полей
-\```
+```
 interface IFormState {
     valid: boolean;
     errors: string[];
 }
-\```
+```
 ### Тип итоговой суммы при успешном оформлении заказа
-\```
+```
 interface ISuccess {
     total: number;
 }
-\```
+```
 ### Возможные действия в случае удачной покупки
-\```
+```
 interface ISuccessActions {
     onClick: () => void;
 }
-\```
+```
 ### Описывает методы обработки событий
-\```
+```
 export interface IEvents {
-    on<T extends object>(event: EventName, callback: (data: T) => void): void; - подписка на событие
-    emit<T extends object>(event: string, data?: T): void; - инициализация события
+    on<T extends object>(event: EventName, callback: (data: T) => void): void; - подписка на событие     
+    emit<T extends object>(event: string, data?: T): void; - инициализация события      
     trigger<T extends object>(event: string, context?: Partial<T>): (data: T) => void; - возвращает функцию, при вызове которой инициализируется требуемое в параметрах событие   
 }
-\```
+```
 ## Архитектура приложения
 ## Об архитектуре 
 
