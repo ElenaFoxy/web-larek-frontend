@@ -48,7 +48,7 @@ yarn build
 ```
 export interface ICard {
 	id: string;
-    description: string;
+	description: string;
 	image: string;
 	title: string;
 	category: string;
@@ -72,8 +72,8 @@ export enum Category {
 ### Корзина с товарами
 ```
 export interface ICart {
-    list: ICard[];
-    total: number;
+	list: ICard[];
+	total: number;
 	add(item: ICard): void;
 	remove(itemId: ICard): void;
 	sumTotal(): number;
@@ -95,9 +95,9 @@ export interface IOrder {
 
 ### Методы работы с API
 `export interface IWebLarekAPI {`
-	`getProductList(): Promise<ICard[]>;` - получить список товаров
-	`getProduct(id: number): Promise<ICard>;` - получить товар по идентификатору
-	`sendOrder(order: IOrder): Promise<IOrderStatus>;}` - отправить заказ
+	`getProductList(): Promise<ICard[]>;` - получить список товаров    
+	`getProduct(id: number): Promise<ICard>;` - получить товар по идентификатору    
+	`sendOrder(order: IOrder): Promise<IOrderStatus>;}` - отправить заказ    
 
 
 ### Типы состояния приложения
@@ -132,7 +132,7 @@ interface ICardActions {
 ### Данные о контенте модального окна
 ```
 interface IModalData {
-content: HTMLElement;
+	content: HTMLElement;
 }
 ```
 ### Типы состояния полей
@@ -177,7 +177,7 @@ export interface IEvents {
 `export class EventEmitter implements IEvents`  
 Брокер событий позволяет отправлять события и подписываться на события, происходящие в системе. Класс используется в презентере для обработки событий и в слоях приложения для генерации событий.     
 `constructor() {this._events = new Map<EventName, Set<Subscriber>>();}` - конструктор класса, он использует Map для хранения обработчиков событий, ключ - это имя события, а значение - это набор функций-обработчиков.    
-Методы:
+##### Методы:
 `on<T extends object>(eventName: EventName, callback: (event: T) => void)`  - устанавливает обработчик на событие.    
 `off(eventName: EventName, callback: Subscriber)`  - снимает обработчик с события.    
 `emit<T extends object>(eventName: string, data?: T)` - инициирует событие с данными.    
@@ -234,8 +234,7 @@ export interface IEvents {
 `private _cart: string[]` - товары в корзине. 
 `private _catalog: ICard[];` - каталог товаров.  
 `private _order: IOrder = ` - заказ.  
-
-	{   payment: Payment.online,
+	{	payment: Payment.online,
 		email: '',
 		phone: '',
 		address: '',
