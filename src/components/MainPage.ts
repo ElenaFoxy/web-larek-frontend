@@ -18,7 +18,7 @@ export class MainPage extends Component<IPage> {
 		this._basket = ensureElement<HTMLElement>('.header__basket');
 
 		this._basket.addEventListener('click', () => {
-			this.events.emit(Events.CART_OPEN);
+			this.events.emit(Events.BASKET_OPEN);
 		});
 	}
 
@@ -31,10 +31,6 @@ export class MainPage extends Component<IPage> {
 	}
 
 	set block(value: boolean) {
-		if (value) {
-			this._wrapper.classList.add('page__wrapper_locked');
-		} else {
-			this._wrapper.classList.remove('page__wrapper_locked');
-		}
+		this.toggleClass(this._wrapper, 'page__wrapper_locked', value);
 	}
 }

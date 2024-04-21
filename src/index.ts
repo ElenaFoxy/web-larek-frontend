@@ -1,8 +1,8 @@
 import './scss/styles.scss';
 import { API_URL, CDN_URL } from './utils/constants';
 import { EventEmitter } from './components/base/events';
-import { WebLarekAPI } from './components/WebLarekAPI';
-import { AppState } from './components/AppData';
+import { WebLarekAPI } from './components/webLarekAPI';
+import { AppState } from './components/appData';
 import {
 	Events,
 	ICard,
@@ -11,12 +11,12 @@ import {
 	IContactsForm,
 	IOrderStatus,
 } from './types';
-import { MainPage } from './components/MainPage';
-import { Card, CardInCart } from './components/card';
+import { MainPage } from './components/mainPage';
+import { Card, CardInBasket } from './components/card';
 import { cloneTemplate, createElement, ensureElement } from './utils/utils';
 import { Modal } from './components/common/modal';
-import { Order, Contacts } from './components/order';
-import { Cart } from './components/common/cart';
+import { OrderForm, Contacts } from './components/order';
+import { Basket } from './components/common/basket';
 import { Success } from './components/common/success';
 
 const events = new EventEmitter();
@@ -32,16 +32,22 @@ const popup = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 //шаблоны
 const cardCatalogTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
 const cardPreviewTemplate = ensureElement<HTMLTemplateElement>('#card-preview');
-const cartTemplate = ensureElement<HTMLTemplateElement>('#basket');
+const basketTemplate = ensureElement<HTMLTemplateElement>('#basket');
 const orderTemplate = ensureElement<HTMLTemplateElement>('#order');
 const contactsTemplate = ensureElement<HTMLTemplateElement>('#contacts');
-const cardInCartTemplate = ensureElement<HTMLTemplateElement>('#card-basket');
+const cardInBasketTemplate = ensureElement<HTMLTemplateElement>('#card-basket');
 const successTemplate = ensureElement<HTMLTemplateElement>('#success');
 
 // Переиспользуемые части интерфейса
-const cart = new Cart(cloneTemplate(cartTemplate), events);
-const order = new Order(cloneTemplate(orderTemplate), events);
+const basket = new Basket(cloneTemplate(basketTemplate), events);
+const order = new OrderForm(cloneTemplate(orderTemplate), events);
 const contacts = new Contacts(cloneTemplate(contactsTemplate), events);
+const success = new Success(cloneTemplate(successTemplate), {
+	onClick: () => {
+		popup.close();
+		events.emit(Events.CARDS_DISPLAY);
+	},
+});
 
 // Получаем товары с сервера
 api
@@ -73,20 +79,20 @@ events.on(Events.CARDS_SHOW, (item: ICard) => {
 			card.button = true;
 			card.addButoonAction({
 				onClick: () => {
-					events.emit(Events.CART_OPEN, item);
+					events.emit(Events.BASKET_OPEN, item);
 				},
 			});
-			if (!appData.cart.includes(item.id)) {
+			if (!appData.basket.includes(item.id)) {
 				events.emit(Events.CARD_ADD, item);
 			}
 		},
 	});
 
-	if (!appData.cart.includes(item.id)) {
+	if (!appData.basket.includes(item.id)) {
 		card.button = false;
 	} else {
 		card.addButoonAction({
-			onClick: () => events.emit(Events.CART_OPEN, item),
+			onClick: () => events.emit(Events.BASKET_OPEN, item),
 		});
 	}
 
@@ -105,46 +111,46 @@ events.on(Events.CARDS_SHOW, (item: ICard) => {
 
 //добавить товар в корзину
 events.on(Events.CARD_ADD, (item: ICard) => {
-	appData.cart.push(item.id);
+	appData.basket.push(item.id);
 	appData.order.items.push(item.id);
 	mainPage.counter = appData.getCount();
 });
 
 //удалить товар из корзины
 events.on(Events.CARD_DELETE, (item: ICard) => {
-	appData.cart = appData.cart.filter((cartItem) => cartItem !== item.id);
+	appData.basket = appData.basket.filter((basketItem) => basketItem !== item.id);
 	appData.order.items = appData.order.items.filter(
 		(orderItem) => orderItem !== item.id
 	);
-	events.emit(Events.CART_OPEN);
+	events.emit(Events.BASKET_OPEN);
 	mainPage.counter = appData.getCount();
 });
 
 //открыть корзину
-events.on(Events.CART_OPEN, () => {
+events.on(Events.BASKET_OPEN, () => {
 	popup.render({
-		content: cart.render(),
+		content: basket.render(),
 	});
-	cart.total = appData.getTotal();
-	cart.items = appData.getAddedCards().map((item, num) => {
-		const cardInCart = new CardInCart(
+	basket.total = appData.getTotal();
+	basket.items = appData.getAddedCards().map((item, num) => {
+		const cardInBasket = new CardInBasket(
 			'card',
-			cloneTemplate(cardInCartTemplate),
+			cloneTemplate(cardInBasketTemplate),
 			{
 				onClick: () => events.emit(Events.CARD_DELETE, item),
 			}
 		);
-		cardInCart.index = (num + 1).toString();
-		return cardInCart.render({
+		cardInBasket.index = (num + 1).toString();
+		return cardInBasket.render({
 			title: item.title,
 			price: item.price,
 		});
 	});
-	if (appData.getCount() == 0) {
-		cart.setButtonDisabled(true);
-	} else {
-		cart.setButtonDisabled(false);
-	}
+	//if (appData.getCount() == 0) {
+		basket.setButtonDisabled(appData.getCount() == 0);
+/*	} else {
+		basket.setButtonDisabled(false);
+	}*/
 });
 
 // Открыть форму заказа
@@ -179,28 +185,17 @@ events.on(Events.ORDER_SUBMIT, (data: IContactsForm) => {
 	appData.order.phone = data.phone;
 	appData.order.total = appData.getTotal();
 	const total = appData.order.total;
-
 	api
 		.sendOrder(appData.order)
 		.then((result: IOrderStatus) => {
 			appData.clear();
 			mainPage.counter = 0;
-
-			const success = new Success(cloneTemplate(successTemplate), {
-				onClick: () => {
-					popup.close();
-					events.emit(Events.CARDS_DISPLAY);
-				},
-			});
-
 			popup.render({
 				content: success.render({ total: total }),
 			});
+			appData.order.total = 0;
 		})
-		.catch((err) => {
-			console.error(err);
-		});
-	appData.order.total = 0;
+		.catch(console.error);
 });
 
 // Блокируем прокрутку страницы если открыта модалка

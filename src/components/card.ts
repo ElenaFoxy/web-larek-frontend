@@ -63,34 +63,31 @@ export class Card<T> extends Component<ICard<T>> {
 		this.setText(this._description, value);
 	}
 
+	setCategory(nameCategory: string) {
+		this.toggleClass(
+			this._category,
+			bem(this.blockName, 'category', nameCategory).name
+		);
+	}
+
 	set category(value: string) {
 		this.setText(this._category, value);
 		this._category.className = this._category.className.split(' ')[0];
 		switch (value) {
 			case Category.other:
-				this._category.classList.add(
-					bem(this.blockName, 'category', 'other').name
-				);
+				this.setCategory('other');
 				break;
 			case Category.softskills:
-				this._category.classList.add(
-					bem(this.blockName, 'category', 'soft').name
-				);
+				this.setCategory('soft');
 				break;
 			case Category.hardskills:
-				this._category.classList.add(
-					bem(this.blockName, 'category', 'hard').name
-				);
+				this.setCategory('hard');
 				break;
 			case Category.plusone:
-				this._category.classList.add(
-					bem(this.blockName, 'category', 'additional').name
-				);
+				this.setCategory('additional');
 				break;
 			case Category.button:
-				this._category.classList.add(
-					bem(this.blockName, 'category', 'button').name
-				);
+				this.setCategory('button');
 				break;
 		}
 	}
@@ -101,6 +98,7 @@ export class Card<T> extends Component<ICard<T>> {
 			this.setText(this._price, `${value} синапсов`);
 		} else {
 			this.setText(this._price, 'бесценно');
+			this.setText(this._button, 'Нельзя купить');
 			this.setDisabled(this._button, true);
 		}
 	}
@@ -118,11 +116,11 @@ export class Card<T> extends Component<ICard<T>> {
 	}
 }
 
-export interface ICardinCart {
+export interface ICardinBasket {
 	index: number;
 }
 
-export class CardInCart extends Card<ICardinCart> {
+export class CardInBasket extends Card<ICardinBasket> {
 	protected _icon: HTMLElement;
 	protected _index: HTMLElement;
 

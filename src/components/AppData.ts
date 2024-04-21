@@ -7,11 +7,10 @@ import {
 	Payment,
 	Events,
 	IContactsForm,
-	IOrderForm,
 } from '../types';
 
 export class AppState extends Model<IAppState> {
-	private _cart: string[] = [];
+	private _basket: string[] = [];
 	private _catalog: ICard[];
 	private _order: IOrder = {
 		payment: Payment.online,
@@ -25,12 +24,12 @@ export class AppState extends Model<IAppState> {
 	preview: string | null;
 	formErrors: FormErrors = {};
 
-	get cart(): string[] {
-		return this._cart;
+	get basket(): string[] {
+		return this._basket;
 	}
 
-	set cart(value: string[]) {
-		this._cart = value;
+	set basket(value: string[]) {
+		this._basket = value;
 	}
 
 	get catalog(): ICard[] {
@@ -57,7 +56,7 @@ export class AppState extends Model<IAppState> {
 	}
 
 	getCount(): number {
-		return this.cart.length;
+		return this.basket.length;
 	}
 
 	setCatalog(items: ICard[]) {
@@ -66,12 +65,12 @@ export class AppState extends Model<IAppState> {
 	}
 
 	getAddedCards(): ICard[] {
-		return this.catalog.filter((item) => this.cart.includes(item.id));
+		return this.catalog.filter((item) => this.basket.includes(item.id));
 	}
 
 	clear() {
 		this.order.items = [];
-		this.cart = [];
+		this.basket = [];
 	}
 
 	validateOrder() {

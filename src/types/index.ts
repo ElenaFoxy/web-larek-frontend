@@ -24,7 +24,7 @@ export enum Category {
 }
 
 //Корзина с товарами
-export interface ICart {
+export interface IBasket {
 	list: ICard[];
 	total: number;
 	add(item: ICard): void;
@@ -94,7 +94,7 @@ export enum Events {
 	ORDER_OPEN = 'order:open', // событие происходит при нажатии кнопки оформления заказа. Открывается форма для заполнения полей заказа - выбор оплаты и адрес.
 	CONTACTS_OPEN = 'contacts:open', //открывается форма для заполнения контактов для заказа.
 	ORDER_SUBMIT = 'order:submit', // событие подтверждения оформления заказа. Данные заказа после проверки отправляются на сервер.
-	CART_OPEN = 'cart:open', //событие происходит при нажатии на корзину (открыть корзину).
+	BASKET_OPEN = 'basket:open', //событие происходит при нажатии на корзину (открыть корзину).
 	POPUP_OPEN = 'popup:open', // модальное окно открыто, страница блокируется.
 	POPUP_CLOSE = 'popup:close', // модальное окно закрыто, страница разблокирована.
 	CARD_ADD = 'card:add', // событие добавления товара в корзину.

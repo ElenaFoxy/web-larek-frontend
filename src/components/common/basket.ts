@@ -2,12 +2,12 @@ import { Component } from '../base/component';
 import { createElement, ensureElement, formatNumber } from '../../utils/utils';
 import { EventEmitter } from '../base/events';
 
-interface ICartView {
+interface IBasketView {
 	items: HTMLElement[];
 	total: number;
 }
 
-export class Cart extends Component<ICartView> {
+export class Basket extends Component<IBasketView> {
 	protected _list: HTMLElement;
 	protected _total: HTMLElement;
 	protected _button: HTMLElement;
@@ -45,10 +45,6 @@ export class Cart extends Component<ICartView> {
 	}
 
 	setButtonDisabled(state: boolean) {
-		if (state) {
-			this.setDisabled(this._button, true);
-		} else {
-			this.setDisabled(this._button, false);
-		}
+		this.setDisabled(this._button, state);
 	}
 }
